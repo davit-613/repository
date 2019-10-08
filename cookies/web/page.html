@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form >
+        <input name="search" id="search"/>
+    </form>
+<script>
+    let input=document.getElementById("search");
+    input.addEventListener("keypress",function (event) {
+        if(event.keyCode===13) {
+            event.preventDefault();
+
+            let xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    let h = document.getElementById("result");
+                    if (h != null) h.outerHTML = "";
+                    h = document.createElement("h1");
+                    h.innerText = this.response;
+                    h.id = "result";
+                    document.body.append(h);
+                }
+
+            }
+            xhr.open("POST", "");
+            xhr.send(input.value);
+        }
+    });
+
+</script>
+</body>
+</html>

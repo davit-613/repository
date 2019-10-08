@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form>
+    <input id="name" name="name"/>
+
+</form>
+
+<script>
+    input=document.getElementById("name");
+    input.addEventListener("keypress", function (ev) {
+        if(ev.keyCode===13){
+            ev.preventDefault();
+           let xhr=new XMLHttpRequest();
+           xhr.onreadystatechange=function(){
+               if(this.readyState===4 && this.status===200) {
+                   let resp=JSON.parse(this.response);
+                   let tables=document.getElementsByTagName("table");
+
+                   if(tables!=[]){
+                       for(let table of tables)
+                           table.outerHTML="";
+                   }
+
+
+
+                   let table=document.createElement("table");
+
+                   let tr=document.createElement("tr");
+                   let th=document.createElement("th");
+                   th.innerText="Name";
+                   tr.append(th);
+
+                   th=document.createElement("th");
+                   th.innerText="Nationality";
+                   tr.append(th);
+
+                   th=document.createElement("th");
+                   th.innerText="Age";
+                   tr.append(th);
+
+                   table.append(tr);
+                   for(let row of resp){
+                       if(row.hasOwnProperty("fullName") &&  row.hasOwnProperty("nationality") && row.hasOwnProperty("age")){
+
+                           tr=document.createElement("tr");
+                        let td=document.createElement("td");
+                        td.innerText=row.fullName;
+                        tr.append(td);
+
+                       td=document.createElement("td");
+                       td.innerText=row.nationality;
+                       tr.append(td);
+
+                       td=document.createElement("td");
+                       td.innerText=row.age;
+                       tr.append(td);
+
+                        table.append(tr);}
+                   }
+                   document.body.append(table);
+
+               }
+           }
+           xhr.open("Post","servlet");
+           xhr.send(input.value);
+        }
+    });
+</script>
+
+</body>
+</html>
